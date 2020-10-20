@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Zaprogramowani\Application\Exception\AgeOutOfRangeException;
 use Zaprogramowani\Application\Exception\UnknownPlaceTypeException;
+use Zaprogramowani\Application\Exception\UnknownSexException;
 use Zaprogramowani\Application\Query\GetData;
 use Zaprogramowani\Application\Service\MortalityDataServiceInterface;
 
@@ -38,7 +39,8 @@ class DataController
             $query = new GetData(
                 $request->get("age"),
                 $request->get("place"),
-                $request->get("place_type")
+                $request->get("place_type"),
+                $request->get("sex")
             );
         } catch (AgeOutOfRangeException $e) {
             return new JsonResponse([
@@ -47,6 +49,10 @@ class DataController
         } catch (UnknownPlaceTypeException $e) {
             return new JsonResponse([
                 "error" => "unknown place type, either city or rural"
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (UnknownSexException $e) {
+            return new JsonResponse([
+                "error" => "unknown sex type, either male or female"
             ], Response::HTTP_BAD_REQUEST);
         };
 
