@@ -7,6 +7,7 @@ namespace Zaprogramowani\Infra\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Zaprogramowani\Application\Query\GetData;
 
 class DataController
 {
@@ -19,5 +20,16 @@ class DataController
             ],
             Response::HTTP_OK
         );
+    }
+
+    public function getData(Request $request): Response
+    {
+        $query = new GetData(
+            $request->get("age"),
+            $request->get("place"),
+            $request->get("place_type")
+        );
+
+
     }
 }
