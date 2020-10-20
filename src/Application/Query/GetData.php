@@ -12,9 +12,9 @@ class GetData
     private const TYPE_CITY = 0;
     private const TYPE_RURAL = 1;
 
-    private $age;
-    private $place;
-    private $placeType;
+    private int $age;
+    private int $place;
+    private int $placeType;
 
     public function __construct(int $age, int $place, int $placeType)
     {

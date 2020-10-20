@@ -7,6 +7,8 @@ namespace Zaprogramowani\Infra\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Zaprogramowani\Application\Exception\AgeOutOfRangeException;
+use Zaprogramowani\Application\Exception\UnknownPlaceTypeException;
 use Zaprogramowani\Application\Query\GetData;
 use Zaprogramowani\Application\Service\MortalityDataServiceInterface;
 
@@ -32,11 +34,21 @@ class DataController
 
     public function getData(Request $request): Response
     {
-        $query = new GetData(
-            $request->get("age"),
-            $request->get("place"),
-            $request->get("place_type")
-        );
+        try {
+            $query = new GetData(
+                $request->get("age"),
+                $request->get("place"),
+                $request->get("place_type")
+            );
+        } catch (AgeOutOfRangeException $e) {
+            return new JsonResponse([
+                "error" => "age parameter should be between 0 and 100"
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (UnknownPlaceTypeException $e) {
+            return new JsonResponse([
+                "error" => "unknown place type, either city or rural"
+            ], Response::HTTP_BAD_REQUEST);
+        };
 
         $view = $this->mortalityDataService->process($query);
 
