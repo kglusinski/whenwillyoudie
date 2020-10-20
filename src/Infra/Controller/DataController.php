@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infra\Controller;
+namespace Zaprogramowani\Infra\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
