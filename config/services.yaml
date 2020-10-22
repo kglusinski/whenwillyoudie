@@ -27,5 +27,7 @@ services:
         resource: '../src/Infra/Controller/'
         tags: ['controller.service_arguments']
 
+    Zaprogramowani\Application\Client\DataSourceClientInterface:
+        class: Zaprogramowani\Application\Client\SQLDataSourceClient
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
