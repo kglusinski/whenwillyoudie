@@ -5,5 +5,5 @@ namespace Zaprogramowani\Application\Client;
 
 interface DataSourceClientInterface
 {
-
+    public function lifeExpectancy();
 }
