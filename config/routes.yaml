@@ -12,6 +12,7 @@ getUserData:
 
 register:
     path: /api/register
+    methods: [POST]
     controller: Zaprogramowani\Infra\Controller\UserController::register
 
 api_login_check:
