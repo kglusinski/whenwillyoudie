@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zaprogramowani\Application\Entity;
 
-class UserData
+class UserData implements \JsonSerializable
 {
     private string $userId;
     private float $deathProbability;
@@ -30,5 +30,13 @@ class UserData
     public function LifeExpectancy(): float
     {
         return $this->lifeExpectancy;
+    }
+
+    public function jsonSerialize()
+    {
+       return [
+           'life_expectancy' => $this->lifeExpectancy,
+           'death_probability' => $this->deathProbability
+       ];
     }
 }

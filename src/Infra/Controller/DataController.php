@@ -14,16 +14,19 @@ use Zaprogramowani\Application\Exception\UnknownPlaceTypeException;
 use Zaprogramowani\Application\Exception\UnknownSexException;
 use Zaprogramowani\Application\Query\GetData;
 use Zaprogramowani\Application\Service\MortalityDataServiceInterface;
+use Zaprogramowani\Application\Service\UserDataService;
 use Zaprogramowani\Infra\Entity\User;
 
 class DataController
 {
     private MortalityDataServiceInterface $mortalityDataService;
+    private UserDataService $dataService;
     private TokenStorageInterface $tokenStorage;
 
-    public function __construct(MortalityDataServiceInterface $mortalityDataService, TokenStorageInterface $tokenStorage)
+    public function __construct(MortalityDataServiceInterface $mortalityDataService, UserDataService $dataService, TokenStorageInterface $tokenStorage)
     {
         $this->mortalityDataService  = $mortalityDataService;
+        $this->dataService = $dataService;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -75,5 +78,24 @@ class DataController
         $view = $this->mortalityDataService->process($query, $user->getId());
 
         return new JsonResponse($view, Response::HTTP_OK);
+    }
+
+    public function getUserHistoricalData(Request $request): Response
+    {
+        $token = $this->tokenStorage->getToken();
+        $user = null;
+        if ($token instanceof TokenInterface) {
+            $user = $token->getUser();
+        }
+
+        if (!($user instanceof User)) {
+            return new JsonResponse([
+                "error" => "not authorized"
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $data = $this->dataService->getUserData($user->getId());
+
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }

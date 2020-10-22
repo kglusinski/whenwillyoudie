@@ -21,7 +21,7 @@ class UserData
     private $uuid;
 
     /**
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string")
      */
     private string $userId;
 

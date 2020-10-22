@@ -6,6 +6,10 @@ getData:
     path: /api/data
     controller: Zaprogramowani\Infra\Controller\DataController::getData
 
+getUserData:
+    path: /api/user/data
+    controller: Zaprogramowani\Infra\Controller\DataController::getUserHistoricalData
+
 register:
     path: /api/register
     controller: Zaprogramowani\Infra\Controller\UserController::register
