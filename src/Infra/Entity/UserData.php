@@ -14,6 +14,13 @@ use Zaprogramowani\Application\Entity\UserData as DomainUserData;
 class UserData
 {
     /**
+     * @ORM\Id()
+     * @ORM\Column(type="string")
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+    private $uuid;
+
+    /**
      * @ORM\Column(type="string", unique=true)
      */
     private string $userId;
@@ -33,6 +40,11 @@ class UserData
         $this->userId = $userId;
         $this->deathProbability = $deathProbability;
         $this->lifeExpectancy = $lifeExpectancy;
+    }
+
+    public function getUuid()
+    {
+        return $this->uuid;
     }
 
     public static function fromDomainUserData(DomainUserData $userData): self
