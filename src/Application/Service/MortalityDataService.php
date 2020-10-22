@@ -27,7 +27,7 @@ class MortalityDataService implements MortalityDataServiceInterface
             "death_probability" => $this->client->deathProbability($query->Age(), $query->Sex(), $query->PlaceType()),
         ];
 
-        $userData = new UserData($userId, $data["life_expectancy"], $data["death_probability"]);
+        $userData = new UserData($userId, $data["death_probability"], $data["life_expectancy"]);
 
         $this->storage->store($userData);
 
