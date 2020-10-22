@@ -1,3 +1,7 @@
 index:
     path: /
     controller: Zaprogramowani\Infra\Controller\DataController::index
+
+getData:
+    path: /data
+    controller: Zaprogramowani\Infra\Controller\DataController::getData

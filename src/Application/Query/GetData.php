@@ -17,18 +17,15 @@ class GetData
     private const SEX_FEMALE = 1;
 
     private int $age;
-    private int $place;
     private int $placeType;
     private int $sex;
 
-    public function __construct(int $age, int $place, int $placeType, int $sex)
+    public function __construct(int $age, int $placeType, int $sex)
     {
         if ($age < 0 || $age > 100) {
             throw new AgeOutOfRangeException();
         }
         $this->age = $age;
-
-        $this->place = $place;
 
         if ($placeType != self::TYPE_CITY && $placeType != self::TYPE_RURAL) {
             throw new UnknownPlaceTypeException();
@@ -46,14 +43,26 @@ class GetData
         return $this->age;
     }
 
-    public function Place(): int
+    public function PlaceType(): string
     {
-        return $this->place;
+        switch ($this->placeType) {
+            case self::TYPE_CITY:
+                return 'city';
+            case self::TYPE_RURAL:
+                return 'rural';
+            default: return "";
+        }
     }
 
-    public function PlaceType(): int
+    public function Sex(): string
     {
-        return $this->placeType;
+        switch ($this->placeType) {
+            case self::SEX_MALE:
+                return 'male';
+            case self::SEX_FEMALE:
+                return 'female';
+            default:
+                return "";
+        }
     }
-
 }

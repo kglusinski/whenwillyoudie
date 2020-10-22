@@ -37,10 +37,9 @@ class DataController
     {
         try {
             $query = new GetData(
-                $request->get("age"),
-                $request->get("place"),
-                $request->get("place_type"),
-                $request->get("sex")
+                $request->query->getInt("age"),
+                $request->query->getInt("place_type"),
+                $request->query->getInt("sex")
             );
         } catch (AgeOutOfRangeException $e) {
             return new JsonResponse([
