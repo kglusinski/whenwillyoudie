@@ -7,19 +7,24 @@ namespace Zaprogramowani\Infra\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Zaprogramowani\Application\Exception\AgeOutOfRangeException;
 use Zaprogramowani\Application\Exception\UnknownPlaceTypeException;
 use Zaprogramowani\Application\Exception\UnknownSexException;
 use Zaprogramowani\Application\Query\GetData;
 use Zaprogramowani\Application\Service\MortalityDataServiceInterface;
+use Zaprogramowani\Infra\Entity\User;
 
 class DataController
 {
     private MortalityDataServiceInterface $mortalityDataService;
+    private TokenStorageInterface $tokenStorage;
 
-    public function __construct(MortalityDataServiceInterface $mortalityDataService)
+    public function __construct(MortalityDataServiceInterface $mortalityDataService, TokenStorageInterface $tokenStorage)
     {
         $this->mortalityDataService  = $mortalityDataService;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function index(Request $request): Response
@@ -55,7 +60,19 @@ class DataController
             ], Response::HTTP_BAD_REQUEST);
         };
 
-        $view = $this->mortalityDataService->process($query);
+        $token = $this->tokenStorage->getToken();
+        $user = null;
+        if ($token instanceof TokenInterface) {
+            $user = $token->getUser();
+        }
+
+        if (!($user instanceof User)) {
+            return new JsonResponse([
+                "error" => "not authorized"
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $view = $this->mortalityDataService->process($query, $user->getId());
 
         return new JsonResponse($view, Response::HTTP_OK);
     }

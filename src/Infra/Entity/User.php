@@ -41,7 +41,7 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

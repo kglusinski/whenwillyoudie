@@ -8,5 +8,5 @@ use Zaprogramowani\Application\Query\GetData;
 
 interface MortalityDataServiceInterface
 {
-    public function process(GetData $query): MortalityChanceView;
+    public function process(GetData $query, string $user): MortalityChanceView;
 }
