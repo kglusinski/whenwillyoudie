@@ -5,58 +5,105 @@ declare(strict_types=1);
 namespace Zaprogramowani\Infra\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Zaprogramowani\Infra\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
  */
 class User implements UserInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="UUID")
-     */
-    private string $id;
-
-    /**
      * @ORM\Column(type="string")
      */
-    private string $username;
+    private $id;
 
     /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $username;
+
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private string $password;
+    private $password;
 
-    public function getRoles(): array
-    {
-        return ["user"];
-    }
-
-    public function getId(): string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPassword(): string
-    {
-        $this->password;
-    }
-
-    public function getSalt()
-    {
-        // Not needed while hashing algorithm is bcrypt
-    }
-
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function getUsername(): string
     {
-        return $this->username;
+        return (string) $this->username;
     }
 
-    public function eraseCredentials(): void
+    public function setUsername(string $username): self
     {
-        $this->password = "";
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }

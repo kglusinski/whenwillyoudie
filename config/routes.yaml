@@ -3,5 +3,8 @@ index:
     controller: Zaprogramowani\Infra\Controller\DataController::index
 
 getData:
-    path: /data
+    path: /api/data
     controller: Zaprogramowani\Infra\Controller\DataController::getData
+
+api_login_check:
+    path: /api/login_check
