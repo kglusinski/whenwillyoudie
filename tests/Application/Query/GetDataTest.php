@@ -36,7 +36,7 @@ final class GetDataTest extends TestCase
     public function testItShouldThrowExceptionOnWrongData(int $age, int $placeType, int $sex, string $exception): void
     {
         $this->expectException($exception);
-        new GetData($age, 1, $placeType, $sex);
+        new GetData($age, $placeType, $sex);
     }
 
     public function dataProvider(): array

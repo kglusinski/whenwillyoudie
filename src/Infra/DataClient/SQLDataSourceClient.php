@@ -25,4 +25,14 @@ class SQLDataSourceClient implements DataSourceClientInterface
 
         return floatval($val);
     }
+
+    public function deathProbability(int $age, string $sex, string $placeType): float
+    {
+        $stmt = $this->db->prepare("SELECT dying_probability FROM life_expectancy WHERE age = ? AND sex = ? AND place_type = ?");
+        $stmt->execute([$age, $sex, $placeType]);
+
+        $val = $stmt->fetchColumn();
+
+        return floatval($val);
+    }
 }

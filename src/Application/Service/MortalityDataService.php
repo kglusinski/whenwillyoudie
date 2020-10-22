@@ -19,10 +19,11 @@ class MortalityDataService implements MortalityDataServiceInterface
 
     public function process(GetData $query): MortalityChanceView
     {
-        $data = $this->client->lifeExpectancy($query->Age(), $query->Sex(), $query->PlaceType());
+        $data = [
+            "life_expectancy" => $this->client->lifeExpectancy($query->Age(), $query->Sex(), $query->PlaceType()),
+            "death_probability" => $this->client->deathProbability($query->Age(), $query->Sex(), $query->PlaceType()),
+        ];
 
-        $view = new MortalityChanceView($data);
-
-        return $view;
+        return new MortalityChanceView($data["life_expectancy"], $data["death_probability"]);
     }
 }
