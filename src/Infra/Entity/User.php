@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zaprogramowani\Infra\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Zaprogramowani\Application\Entity\User as DomainUser;
 use Zaprogramowani\Infra\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,7 +17,6 @@ class User implements UserInterface
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="string")
      */
     private $id;
@@ -33,6 +33,13 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    public function __construct(string $id, string $username, string $password)
+    {
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +112,10 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public static function fromDomainUser(DomainUser $domainUser): self
+    {
+        return new self($domainUser->Uuid(), $domainUser->Username(), $domainUser->Password());
     }
 }

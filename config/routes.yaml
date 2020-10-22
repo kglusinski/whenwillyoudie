@@ -6,5 +6,9 @@ getData:
     path: /api/data
     controller: Zaprogramowani\Infra\Controller\DataController::getData
 
+register:
+    path: /api/register
+    controller: Zaprogramowani\Infra\Controller\UserController::register
+
 api_login_check:
     path: /api/login_check

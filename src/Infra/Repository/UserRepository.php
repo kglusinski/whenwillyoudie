@@ -2,6 +2,8 @@
 
 namespace Zaprogramowani\Infra\Repository;
 
+use Zaprogramowani\Application\Entity\User as DomainUser;
+use Zaprogramowani\Application\Service\UserStoreInterface;
 use Zaprogramowani\Infra\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserStoreInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -32,6 +34,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newEncodedPassword);
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
+    public function save(DomainUser $domainUser)
+    {
+        $user = User::fromDomainUser($domainUser);
+
         $this->_em->persist($user);
         $this->_em->flush();
     }
